@@ -34,18 +34,20 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                //Intent creerItem = new Intent(this, null);
+                //startActivity(creerItem);
             }
         });
         Log.i("INIT", "Fin initialisation composantes");
 
         // Test d'ajout d'un item
-//        TodoItem item = new TodoItem(TodoItem.Tags.Important, "Réviser ses cours");
-//        TodoDbHelper.addItem(item, getBaseContext());
-//        item = new TodoItem(TodoItem.Tags.Normal, "Acheter du pain");
-//        TodoDbHelper.addItem(item, getBaseContext());
-
+        TodoItem item = new TodoItem(TodoItem.Tags.Important, "Réviser ses cours");
+        TodoDbHelper.addItem(item, getBaseContext());
+        item = new TodoItem(TodoItem.Tags.Normal, "Acheter du pain");
+        TodoDbHelper.addItem(item, getBaseContext());
+//fin
         // On récupère les items
         items = TodoDbHelper.getItems(getBaseContext());
         Log.i("INIT", "Fin initialisation items");
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         setRecyclerViewItemTouchListener();
         Log.i("INIT", "Fin initialisation recycler");
+        //TodoDbHelper.addItem(new TodoItem("item11",new TodoItem.Tags("Normal"),true));
+
     }
 
     @Override

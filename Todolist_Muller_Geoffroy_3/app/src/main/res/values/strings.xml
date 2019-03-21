@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Todolist_Muller_Geoffroy_3</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_creer_item">Creer Un Item</string>
+</resources>
