@@ -2,4 +2,12 @@
     <string name="app_name">Todolist_Muller_Geoffroy_3</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_creer_item">Creer Un Item</string>
+    <string name="entrez_le_label">Entrez le label</string>
+    <string name="textviewlabel">TextView</string>
+    <string name="textviewtag">Tag :</string>
+    <string name="textview">TextView</string>
+    <string name="important">Important</string>
+    <string name="faible">Faible</string>
+    <string name="normal">Normal</string>
+    <string name="label">Label :</string>
 </resources>
