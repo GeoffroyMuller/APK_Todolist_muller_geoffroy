@@ -6,8 +6,12 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 public class CreerItemActivity extends AppCompatActivity {
 
@@ -18,19 +22,32 @@ public class CreerItemActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TextInputEditText textlab = findViewById(R.id.editTextLabel);
-        RadioButton rbfaible = findViewById(R.id.radioButtonFaible);
-        RadioButton rbnormal = findViewById(R.id.radiobuttonnormal);
-        RadioButton rbimportant = findViewById(R.id.radioButtonImportant);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with ", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                EditText editlab = findViewById(R.id.editTextLabel);
+                RadioButton rbfaible = findViewById(R.id.radioButtonFaible);
+                RadioButton rbnormal = findViewById(R.id.radiobuttonnormal);
+                RadioButton rbimportant = findViewById(R.id.radioButtonImportant);
+                String label = editlab.getText().toString();
+                TodoItem.Tags tags = TodoItem.getTagFor("Faible");
+                String test3 = "rien";
 
+                if(rbfaible.isChecked()){
+                    tags = TodoItem.getTagFor("Faible");
+                }else if(rbnormal.isChecked()){
+                    tags = TodoItem.getTagFor("Normal");
+                }else if(rbimportant.isChecked()){
+                    tags = TodoItem.getTagFor("Important");
+                }
+                TodoItem res = new TodoItem(tags, label);
+                TodoDbHelper.addItem(res, getApplicationContext());
+                Snackbar.make(view,  label+" "+test3, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                startActivities();
             }
+
         });
 
 
