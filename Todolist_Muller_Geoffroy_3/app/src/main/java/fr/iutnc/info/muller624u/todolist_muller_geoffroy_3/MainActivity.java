@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +18,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static MainActivity mainActivity;
     private ArrayList<TodoItem> items;
     private RecyclerView recycler;
     private LinearLayoutManager manager;
@@ -27,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static  Boolean autoRefrech = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainActivity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -71,14 +71,14 @@ public class MainActivity extends AppCompatActivity {
 
         if(autoRefrech == true){
             autoRefrech = false;
-            Log.i("INIT", "aaaaaaaaaaaaaaaaaaaaaaaaaaa"+autoRefrech+"aaaaaaaaaaaaaaaaaaaaaaaaa");
+
             finish();
             startActivity(getIntent());
         }else {
             autoRefrech = true;
-            Log.i("INIT", "dddddddddddddddddddddddd"+autoRefrech+"ddddddddddddddddddddddddd");
+
         }
-        Log.i("INIT", "cccccccccccccccccccccccccc"+autoRefrech+"cccccccccccccccccccccc");
+
     }
 
     @Override
@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -118,8 +121,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 TodoDbHelper.viderTable(getBaseContext());
-                finish();
-                startActivity(getIntent());
+                onResume();
+
+
             }
         });
         builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
@@ -131,12 +135,18 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-
+    public static MainActivity getContext(){
+        return mainActivity;
+    }
     private void setRecyclerViewItemTouchListener() {
+
         ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder1) {
                 // Non géré dans cet exemple (ce sont les drags) -> on retourne false
+                Log.i("INIT", "mmmmmmmmmmmmmmmmmmmmmmm");
                 return false;
             }
 
@@ -148,13 +158,19 @@ public class MainActivity extends AppCompatActivity {
                 switch(swipeDir) {
                     case ItemTouchHelper.RIGHT:
                         item.setDone(true);
+                        Log.i("INIT", "gauche");
                         break;
                     case ItemTouchHelper.LEFT:
                         item.setDone(false);
+                        Log.i("INIT", "droite");
                         break;
                 }
                 recycler.getAdapter().notifyItemChanged(position);
+                Log.i("INIT", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" );
             }
+
+
+
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);

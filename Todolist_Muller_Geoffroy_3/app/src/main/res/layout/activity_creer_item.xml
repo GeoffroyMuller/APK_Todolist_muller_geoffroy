@@ -28,9 +28,11 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity=""
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/faible"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center"
         app:srcCompat="@drawable/ic_action_check" />
 
 </android.support.design.widget.CoordinatorLayout>

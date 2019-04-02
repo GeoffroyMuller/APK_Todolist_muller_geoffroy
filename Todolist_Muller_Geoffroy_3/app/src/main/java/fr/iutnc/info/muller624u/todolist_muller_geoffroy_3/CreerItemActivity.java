@@ -46,8 +46,7 @@ public class CreerItemActivity extends AppCompatActivity {
                 TodoDbHelper.addItem(res, getApplicationContext());
                 Snackbar.make(view,  label+" "+test3, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent eActivity = new Intent(CreerItemActivity.this, MainActivity.class);
-                //startActivities(eActivity);
+                finish();
             }
 
         });

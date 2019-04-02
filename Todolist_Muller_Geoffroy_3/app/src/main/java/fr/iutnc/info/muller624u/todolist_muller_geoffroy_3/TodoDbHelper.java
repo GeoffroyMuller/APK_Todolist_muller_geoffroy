@@ -2,11 +2,13 @@ package fr.iutnc.info.muller624u.todolist_muller_geoffroy_3;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -53,7 +55,8 @@ public class TodoDbHelper extends SQLiteOpenHelper {
         String[] projection = {
                 TodoContract.TodoEntry.COLUMN_NAME_LABEL,
                 TodoContract.TodoEntry.COLUMN_NAME_TAG,
-                TodoContract.TodoEntry.COLUMN_NAME_DONE
+                TodoContract.TodoEntry.COLUMN_NAME_DONE,
+                TodoContract.TodoEntry._ID
         };
 
         // Requête
@@ -74,7 +77,8 @@ public class TodoDbHelper extends SQLiteOpenHelper {
             String label = cursor.getString(cursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_NAME_LABEL));
             TodoItem.Tags tag = TodoItem.getTagFor(cursor.getString(cursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_NAME_TAG)));
             boolean done = (cursor.getInt(cursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_NAME_DONE)) == 1);
-            TodoItem item = new TodoItem(label, tag, done);
+            int id = cursor.getInt(cursor.getColumnIndex(TodoContract.TodoEntry._ID));
+            TodoItem item = new TodoItem(label, tag, done, id);
             items.add(item);
         }
 
@@ -84,7 +88,29 @@ public class TodoDbHelper extends SQLiteOpenHelper {
         // Retourne le résultat
         return items;
     }
+    static void supItem(final TodoItem item, final Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getContext());
+        builder.setMessage("Voulez vous supprimer l'Item ?");
+        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                TodoDbHelper dbHelper = new TodoDbHelper(context);
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+                db.delete(TodoContract.TodoEntry.TABLE_NAME,"_id="+"\""+item.getId()+"\"",null);
+                MainActivity.getContext().recreate();
+            }
+        });
+        builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
 
+    }
     static void addItem(TodoItem item, Context context) {
         TodoDbHelper dbHelper = new TodoDbHelper(context);
 

@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,13 +16,33 @@
             android:layout_height="10dp"
             android:background="@android:color/holo_green_dark"
             android:id="@+id/imageView"
-            />
+            android:contentDescription="TODO" />
 
         <Switch
+            android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/switch1"
             android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/imageButton_modif"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_weight="0.2"
+            android:backgroundTint="?attr/colorButtonNormal"
+            android:contentDescription="TODO"
+            android:onClick="onClickModif"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/imageButton_supp"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_weight="0.2"
+            android:backgroundTint="?attr/colorButtonNormal"
+            android:onClick="onClickSup"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
     </LinearLayout>
 
     <TextView
