@@ -1,5 +1,6 @@
 package fr.iutnc.info.muller624u.todolist_muller_geoffroy_3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,7 +46,8 @@ public class CreerItemActivity extends AppCompatActivity {
                 TodoDbHelper.addItem(res, getApplicationContext());
                 Snackbar.make(view,  label+" "+test3, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                startActivities();
+                Intent eActivity = new Intent(CreerItemActivity.this, MainActivity.class);
+                //startActivities(eActivity);
             }
 
         });
