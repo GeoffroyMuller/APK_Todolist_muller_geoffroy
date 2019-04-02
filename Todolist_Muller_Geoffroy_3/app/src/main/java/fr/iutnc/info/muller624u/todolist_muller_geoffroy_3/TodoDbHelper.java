@@ -104,6 +104,19 @@ public class TodoDbHelper extends SQLiteOpenHelper {
         dbHelper.close();
     }
 
+    static void viderTable(Context context){
+        TodoDbHelper dbHelper = new TodoDbHelper(context);
+
+        // Récupération de la base
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Enregistrement
+        long newRowId = db.delete(TodoContract.TodoEntry.TABLE_NAME, null,null);
+
+        // Ménage
+        dbHelper.close();
+    }
+
     public ArrayList<Cursor> getData(String Query) {
         //get writable database
         SQLiteDatabase sqlDB = this.getWritableDatabase();

@@ -10,4 +10,5 @@
     <string name="faible">Faible</string>
     <string name="normal">Normal</string>
     <string name="label">Label :</string>
+    <string name="vider">Vider</string>
 </resources>

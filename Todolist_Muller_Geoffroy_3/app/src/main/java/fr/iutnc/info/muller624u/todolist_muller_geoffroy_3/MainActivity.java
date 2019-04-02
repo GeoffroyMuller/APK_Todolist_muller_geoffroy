@@ -1,9 +1,11 @@
 package fr.iutnc.info.muller624u.todolist_muller_geoffroy_3;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,9 +84,37 @@ public class MainActivity extends AppCompatActivity {
             startActivity(dbmanager);
             return true;
         }
+        if (id == R.id.action_vider) {
+            //
+            this.alertsupptable();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void alertsupptable(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Voulez vous supprimer touts les Items ?");
+        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                TodoDbHelper.viderTable(getBaseContext());
+                finish();
+                startActivity(getIntent());
+            }
+        });
+        builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     private void setRecyclerViewItemTouchListener() {
         ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
