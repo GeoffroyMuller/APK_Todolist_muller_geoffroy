@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private LinearLayoutManager manager;
     private RecyclerAdapter adapter;
-
+    private static  Boolean autoRefrech = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +62,23 @@ public class MainActivity extends AppCompatActivity {
 
         setRecyclerViewItemTouchListener();
         Log.i("INIT", "Fin initialisation recycler");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(autoRefrech == true){
+            autoRefrech = false;
+            Log.i("INIT", "aaaaaaaaaaaaaaaaaaaaaaaaaaa"+autoRefrech+"aaaaaaaaaaaaaaaaaaaaaaaaa");
+            finish();
+            startActivity(getIntent());
+        }else {
+            autoRefrech = true;
+            Log.i("INIT", "dddddddddddddddddddddddd"+autoRefrech+"ddddddddddddddddddddddddd");
+        }
+        Log.i("INIT", "cccccccccccccccccccccccccc"+autoRefrech+"cccccccccccccccccccccc");
     }
 
     @Override
