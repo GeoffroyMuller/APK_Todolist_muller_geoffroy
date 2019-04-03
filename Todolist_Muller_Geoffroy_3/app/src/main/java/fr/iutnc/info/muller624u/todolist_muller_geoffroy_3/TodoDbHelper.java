@@ -89,26 +89,10 @@ public class TodoDbHelper extends SQLiteOpenHelper {
         return items;
     }
     static void supItem(final TodoItem item, final Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getContext());
-        builder.setMessage("Voulez vous supprimer l'Item ?");
-        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+
                 TodoDbHelper dbHelper = new TodoDbHelper(context);
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 db.delete(TodoContract.TodoEntry.TABLE_NAME,"_id="+"\""+item.getId()+"\"",null);
-                MainActivity.getContext().recreate();
-            }
-        });
-        builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
 
     }
     static void addItem(TodoItem item, Context context) {
@@ -125,6 +109,25 @@ public class TodoDbHelper extends SQLiteOpenHelper {
 
         // Enregistrement
         long newRowId = db.insert(TodoContract.TodoEntry.TABLE_NAME, null, values);
+
+        // Ménage
+        dbHelper.close();
+    }
+
+    static void updateItem(TodoItem item, Context context) {
+        TodoDbHelper dbHelper = new TodoDbHelper(context);
+
+        // Récupération de la base
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Création de l'enregistrement
+        ContentValues values = new ContentValues();
+        values.put(TodoContract.TodoEntry.COLUMN_NAME_LABEL, item.getLabel());
+        values.put(TodoContract.TodoEntry.COLUMN_NAME_TAG, item.getTag().getDesc());
+        values.put(TodoContract.TodoEntry.COLUMN_NAME_DONE, item.isDone());
+
+        // Enregistrement
+        long newRowId = db.update(TodoContract.TodoEntry.TABLE_NAME, values, "_id="+item.getId(),null);
 
         // Ménage
         dbHelper.close();

@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="fr.iutnc.info.muller624u.todolist_muller_geoffroy_3.MainActivity">
     <item
+        android:id="@+id/action_actualiser"
+        android:orderInCategory="100"
+        android:title="Actualiser"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
@@ -11,5 +16,10 @@
         android:id="@+id/action_vider"
         android:orderInCategory="100"
         android:title="@string/vider"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_trier"
+        android:orderInCategory="100"
+        android:title="Trier"
         app:showAsAction="never" />
 </menu>

@@ -2,6 +2,7 @@ package fr.iutnc.info.muller624u.todolist_muller_geoffroy_3;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -14,10 +15,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private static boolean etatTrier = false;
     private static MainActivity mainActivity;
     private ArrayList<TodoItem> items;
     private RecyclerView recycler;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private static  Boolean autoRefrech = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         mainActivity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -50,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
         // On récupère les items
         items = TodoDbHelper.getItems(getBaseContext());
+        if(etatTrier){
+            items = this.trier(items);
+        }
         Log.i("INIT", "Fin initialisation items");
 
         // On initialise le RecyclerView
@@ -68,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        setVisible(false);
 
-        if(autoRefrech == true){
+        /*if(autoRefrech == true){
             autoRefrech = false;
 
             finish();
@@ -77,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         }else {
             autoRefrech = true;
 
-        }
-
+        }*/
+        setVisible(true);
     }
 
     @Override
@@ -103,10 +112,23 @@ public class MainActivity extends AppCompatActivity {
             Intent dbmanager = new Intent(this,AndroidDatabaseManager.class);
             startActivity(dbmanager);
             return true;
-        }
-        if (id == R.id.action_vider) {
+        }else if (id == R.id.action_vider) {
             //
             this.alertsupptable();
+
+            return true;
+        }else if (id == R.id.action_actualiser) {
+            //
+            setVisible(false);
+            recreate();
+            setVisible(true);
+
+            return true;
+        }else if (id == R.id.action_trier){
+            etatTrier = !etatTrier;
+            setVisible(false);
+            recreate();
+            setVisible(true);
             return true;
         }
 
@@ -121,7 +143,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 TodoDbHelper.viderTable(getBaseContext());
-                onResume();
+                setVisible(false);
+                recreate();
+                setVisible(true);
 
 
             }
@@ -155,18 +179,33 @@ public class MainActivity extends AppCompatActivity {
                 int position = viewHolder.getAdapterPosition();
                 TodoItem item = items.get(position);
 
+                LinearLayout viewItem = (LinearLayout) viewHolder.itemView.findViewById(R.id.lin_lay_font_item);
+                ImageButton buttonSup = (ImageButton) viewHolder.itemView.findViewById(R.id.imageButton_supp);
+                ImageButton buttonModif = (ImageButton) viewHolder.itemView.findViewById(R.id.imageButton_modif);
+
                 switch(swipeDir) {
                     case ItemTouchHelper.RIGHT:
                         item.setDone(true);
-                        Log.i("INIT", "gauche");
+                        TodoDbHelper.updateItem(item, MainActivity.getContext());
+                        viewItem.setBackgroundColor(Color.argb(40,40, 73, 92));
+                        buttonSup.setBackgroundColor(Color.argb(40,40, 73, 92));
+                        buttonModif.setBackgroundColor(Color.argb(40,40, 73, 92));
+                        Log.i("INIT", "ddd");
                         break;
                     case ItemTouchHelper.LEFT:
                         item.setDone(false);
-                        Log.i("INIT", "droite");
+                        TodoDbHelper.updateItem(item, MainActivity.getContext());
+                        viewItem.setBackgroundColor(Color.argb(0,40, 73, 92));
+                        buttonSup.setBackgroundColor(Color.argb(0,40, 73, 92));
+                        buttonModif.setBackgroundColor(Color.argb(0,40, 73, 92));
+                        Log.i("INIT", "ggg");
                         break;
+
                 }
+
+
                 recycler.getAdapter().notifyItemChanged(position);
-                Log.i("INIT", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" );
+
             }
 
 
@@ -175,5 +214,31 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recycler);
+    }
+
+    public ArrayList<TodoItem> trier(ArrayList<TodoItem> items) {
+        ArrayList<TodoItem> faible = new ArrayList<TodoItem>();
+        ArrayList<TodoItem> normal = new ArrayList<TodoItem>();
+        ArrayList<TodoItem> important = new ArrayList<TodoItem>();
+        for(int i = 0; i < items.size(); i++) {
+            String test = items.get(i).getTag().toString();
+            if(test.equals("Important")){
+                important.add(items.get(i));
+            }
+            else  if(test.equals("Normal")){
+                normal.add(items.get(i));
+            }
+            else  if(test.equals("Faible")){
+                faible.add(items.get(i));
+            }
+        }
+
+        for(int i = 0; i < normal.size(); i++) {
+            important.add(normal.get(i));
+        }
+        for(int i = 0; i < faible.size(); i++) {
+            important.add(faible.get(i));
+        }
+        return important;
     }
 }
